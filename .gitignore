@@ -1,0 +1,33 @@
+# Node modules
+node_modules/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE folders
+.vscode/
+.idea/
+
+# Coverage and build
+coverage/
+build/
+dist/
+
+# Optional: OS-specific
+*.swp
+*.swo
+
+backend/.env
+backend/.env.local
+backend/.env.*.local

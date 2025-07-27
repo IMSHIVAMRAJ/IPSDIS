@@ -1,0 +1,35 @@
+Latest New -
+News title , news date , image, big content , links
+
+executive council - name , designation , image, postal Address, Email ID, Mobile No,
+Brief Biodata
+
+Editorial Board- category , content , areas of specialization
+
+Books- name, Editors, year, pages , price ,isbn, about the book , contents
+
+Workshop- 
+S.No. ,	Year	,Topic,	Venue,	Date
+
+Award - S.No, Name , year, value, periodicity,eligibility, administration , procedure , presentation
+
+Awardees- Name of award , S.No, Year , Name of Awardees, Topic of lecture
+
+Award Nomination - Main content(text and points),instructions(in points) , links
+
+Membership - Membership information, nationality, Membership type, Membership fee, gst, total
+
+payment details- 
+Name of the Account Holder ,Name of the Bank and Branch,Account Number,RTGS/NEFT/IFS Code,MICR Code
+
+Membership registration - nationality(that will come from Membership model created earlier)
+Email Address
+Contact
+Password
+Confirm Password ,
+Designation	,Address,Area of Specialization,
+Membership type and fee (that will come from Membership model created earlier)
+when clicked on submit admin can either accept or reject it . intially it will be in pending state it accepted that status will be accepted and if rejects it will be deleted from db . 
+
+
+Download - title and date , on clicking the pdf gets downloaded 
