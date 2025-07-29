@@ -30,7 +30,7 @@ export default function Journal() {
               Latest Issue
             </div>
             <a
-              href="/Images/books.pdf"
+              href="/publications/books"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-700 text-white px-4 py-1 rounded text-sm font-semibold hover:bg-green-800 transition"

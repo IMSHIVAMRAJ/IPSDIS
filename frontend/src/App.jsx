@@ -7,10 +7,13 @@ import About from "./pages/About/About";
 import History from "./pages/About/History";
 import Vision from "./pages/About/Vision";
 import ExecutiveCouncil from "./pages/About/ExecutiveCouncil";
+import PresentExecutiveCouncil from "./pages/About/PresentExecutiveCouncil";
+import ExecutiveProfile from "./pages/About/ExecutiveProfile";
 import Publications from "./pages/Publications/Publications";
 import Journal from "./pages/Publications/Journal";
 import EditorialBoard from "./pages/Publications/EditorialBoard";
 import Books from "./pages/Publications/Books";
+import BookDetail from "./pages/Publications/BookDetail";
 import AbstractBooks from "./pages/Publications/AbstractBooks";
 import AnnualReports from "./pages/Publications/AnnualReports";
 import Awards from "./pages/Awards/Awards";
@@ -26,7 +29,7 @@ import Directory from "./pages/Membership/Directory";
 import Registration from "./pages/Membership/Registration";
 import Downloads from "./pages/Downloads";
 import Contact from "./pages/Contact";
-import PresentExecutiveCouncil from "./pages/About/PresentExecutiveCouncil";
+import News from "./pages/News";
 import { FaArrowUp } from "react-icons/fa";
 import Login from "./pages/Login";
 import Guidelines from "./pages/Awards/Guidelines";
@@ -73,10 +76,12 @@ function App() {
           <Route path="/vision" element={<Vision />} />
           <Route path="/executive-council" element={<ExecutiveCouncil />} />
           <Route path="/present-executive-council" element={<PresentExecutiveCouncil />} />
+          <Route path="/executive-profile/:profileId" element={<ExecutiveProfile />} />
           <Route path="/publications" element={<Publications />} />
           <Route path="/publications/journal" element={<Journal />} />
           <Route path="/publications/editorial-board" element={<EditorialBoard />} />
           <Route path="/publications/books" element={<Books />} />
+          <Route path="/publications/book/:bookId" element={<BookDetail />} />
           <Route path="/publications/abstract-books" element={<AbstractBooks />} />
           <Route path="/publications/annual-reports" element={<AnnualReports />} />
           <Route path="/awards" element={<Awards />} />
@@ -93,8 +98,11 @@ function App() {
           <Route path="/membership/directory" element={<Directory />} />
           <Route path="/membership/registration" element={<Registration />} />
           <Route path="/downloads" element={<Downloads />} />
-          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news/:newsId" element={<News />} />
+          {/* Admin Panel Routes */}
+          <Route path="/admin/*" element={<AdminPanel />} />
         </Routes>
       </main>
       <ScrollToTopButton />

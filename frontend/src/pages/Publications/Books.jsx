@@ -1,29 +1,36 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const books = [
   {
     title: "Recent Approaches for Management of Plant Diseases",
     img: "/Images/book1.jpg",
+    id: "recent-approaches-management-plant-diseases"
   },
   {
     title: "Diseases of Ornamental Crops (2017)",
     img: "/Images/book2.jpg",
+    id: "diseases-ornamental-crops-2017"
   },
   {
     title: "पादप रोगों को चुनौतियाँ एवं समाधान (2016) - हिंदी प्रकाशन",
     img: "/Images/book3.jpg",
+    id: "padap-rogon-chunautiyan-samadhan-2016"
   },
   {
     title: "Diseases of Field Crops (2016)",
     img: "/Images/book3.jpg",
+    id: "diseases-field-crops-2016"
   },
   {
     title: "Perspectives of Plant Pathology (2016)",
     img: "/Images/book4.jpg",
+    id: "perspectives-plant-pathology-2016"
   },
   {
     title: "Diseases of Vegetable Crops (2014)",
     img: "/Images/book5.jpg",
+    id: "diseases-vegetable-crops-2014"
   },
 ];
 
@@ -70,9 +77,10 @@ export default function Books() {
         </div>
         <div className="flex flex-wrap gap-6">
           {books.map((book, idx) => (
-            <div
+            <Link
               key={idx}
-              className="w-48 bg-white rounded shadow hover:shadow-lg transition flex flex-col items-center"
+              to={`/publications/book/${book.id}`}
+              className="w-48 bg-white rounded shadow hover:shadow-lg transition flex flex-col items-center transform hover:scale-105 duration-200"
             >
               <img
                 src={book.img}
@@ -83,7 +91,7 @@ export default function Books() {
               <div className="p-2 text-center text-base text-green-900 font-medium">
                 {book.title}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

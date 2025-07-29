@@ -1,12 +1,29 @@
 import React from "react";
 import { FaArrowRight, FaLeaf, FaImages } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Carousel from "../components/Carousel";
 
 const newsItems = [
-  { text: "Participation in Viksit Krishi Sankalp Abhiyan-2025 and Reorientation of Institutional Research", date: "2025-05-29" },
-  { text: "IPS Annual General Body Meeting (AGBM) on January 20, 2025 at 5.00 PM at Nagpur, Maharashtra", date: "2024-12-17" },
-  { text: "Final Voting Announcement: IPS Election Announcement (2025)", date: "2024-12-17" },
-  { text: "Online IPS Awards application: Submission date extended till 31st August 2024", date: "2024-07-29" },
+  { 
+    text: "Participation in Viksit Krishi Sankalp Abhiyan-2025 and Reorientation of Institutional Research", 
+    date: "2025-05-29",
+    id: "participation-viksit-krishi-sankalp-abhiyan-2025"
+  },
+  { 
+    text: "IPS Annual General Body Meeting (AGBM) on January 20, 2025 at 5.00 PM at Nagpur, Maharashtra", 
+    date: "2024-12-17",
+    id: "ips-annual-general-body-meeting-2025"
+  },
+  { 
+    text: "Final Voting Announcement: IPS Election Announcement (2025)", 
+    date: "2024-12-17",
+    id: "final-voting-announcement-ips-election-2025"
+  },
+  { 
+    text: "Online IPS Awards application: Submission date extended till 31st August 2024", 
+    date: "2024-07-29",
+    id: "online-ips-awards-application-extension"
+  },
 ];
 
 function Home() {
@@ -49,13 +66,13 @@ function Home() {
                 <p className="text-green-900">
                   It provides a unique platform to the scientists working in the field of plant pathological related research to share their research achievements. It also keeps members informed about the various activities related to the development of plant pathology and about the members of the Society.
                 </p>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="inline-flex items-center gap-2 mt-4 px-5 py-2 rounded bg-[#0d6e50] text-white font-semibold shadow hover:bg-[#0a573f] transition-colors duration-200"
                   style={{ lineHeight: 1.25 }}
                 >
                   Read More <FaArrowRight style={{ fontSize: '1.0em' }} />
-                </a>
+                </Link>
               </div>
             </div>
           </section>
@@ -85,14 +102,22 @@ function Home() {
         <aside className="w-full md:w-80 flex flex-col gap-6">
           {/* Latest News Section */}
           <section className="bg-white rounded-lg shadow p-4 max-h-[340px] min-h-[340px] flex flex-col">
-            <h2 className="text-xl font-bold text-green-900 mb-3">Latest News</h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-bold text-green-900">Latest News</h2>
+              <Link to="/news" className="text-green-600 hover:text-green-800 text-sm font-medium">
+                View All
+              </Link>
+            </div>
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
               <ul className="space-y-3">
                 {newsItems.map((item, idx) => (
                   <li key={idx} className="flex flex-col border-b border-gray-100 pb-2 last:border-b-0">
-                    <a href="#" className="text-green-900 font-medium hover:underline text-base">
+                    <Link 
+                      to={`/news/${item.id}`}
+                      className="text-green-900 font-medium hover:underline text-base"
+                    >
                       {item.text}
-                    </a>
+                    </Link>
                     <span className="text-xs text-gray-500 mt-1">{item.date}</span>
                   </li>
                 ))}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 const councilMembers = [
   {
@@ -7,21 +7,21 @@ const councilMembers = [
     position: "President (2025)",
     category: "President",
     img: "https://www.ipsdis.org/image/cache/catalog/EC2024/2017-19%20Dinesh%20Singh-153x198.jpg",
-    profile: "#",
+    profile: "/executive-profile/dinesh-singh",
   },
   {
     name: "R. Viswanathan",
     position: "President-Elect (2025)",
     category: "President",
     img: "https://www.ipsdis.org/image/cache/catalog/Chief%20Editor/RViswanathan-153x198.jpg",
-    profile: "#",
+    profile: "/executive-profile/r-viswanathan",
   },
   {
     name: "Kajal K. Biswas",
     position: "Secretary (2023-25)",
     category: "Secretary",
     img: "https://www.ipsdis.org/image/cache/catalog/EC2023/Kajal%20K.%20Biswas-153x198.jpg",
-    profile: "#",
+    profile: "/executive-profile/kajal-k-biswas",
   },
   {
     name: "Lakshman Prasad",
@@ -71,12 +71,12 @@ function PresentExecutiveCouncil() {
             />
             <div className="text-lg font-bold text-green-800 mb-1 text-center">{member.name}</div>
             <div className="text-base text-gray-700 mb-4 text-center">{member.position}</div>
-            <a
-              href={member.profile}
+            <Link
+              to={member.profile}
               className="px-5 py-2 rounded bg-green-700 text-white font-semibold shadow hover:bg-green-800 transition-colors duration-200 text-base"
             >
               VIEW PROFILE
-            </a>
+            </Link>
           </div>
         ))}
       </div>

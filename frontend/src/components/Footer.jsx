@@ -71,7 +71,7 @@ function Footer() {
       </div>
       {/* Copyright and up arrow */}
       <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] flex justify-center items-center mt-8 p-4 border-t border-green-900 text-center text-white text-lg sm:text-lg text-xs sm:p-4 p-2" style={{ backgroundColor: '#0a573f' }}>
-        <span className="mx-auto">© 2025 The Indian Phytopathological Society. All rights reserved.</span>
+        <span className="mx-auto">© {new Date().getFullYear()} The Indian Phytopathological Society. All rights Reserved. Developed by DiGrows.</span>
       </div>
     </footer>
   );
