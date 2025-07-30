@@ -88,7 +88,7 @@ function App() {
           <Route path="/awards" element={<Awards />} />
           <Route path="/awards/society" element={<SocietyAwards />} />
           <Route path="/awards/nomination" element={<Nomination />} />
-          <Route path="/awards/guidelines/:awardName" element={<Guidelines />} />
+          {/* <Route path="/awards/guidelines/:awardName" element={<Guidelines />} /> */}
           <Route path="/awards/awardees/:awardName" element={<Awardees />} />
           <Route path="/conference" element={<Conference />} />
           <Route path="/conference/national-symposia" element={<NationalSymposia />} />
@@ -101,7 +101,7 @@ function App() {
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/news" element={<News />} />
-          <Route path="/news/:newsId" element={<News />} />
+        <Route path="/awards/guidelines/:id" element={<Guidelines />} />
           <Route path="/admin-login" element={<AdminLogin />} />
 
           {/* Admin Panel Routes */}

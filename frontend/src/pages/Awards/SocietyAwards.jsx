@@ -1,31 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const awards = [
-  {
-    name: "Mundkur Memorial Award",
-    year: 1962,
-    guidelines: "#",
-    awardees: "#",
-    registration: "#",
-  },
-  {
-    name: "Jeersannidhi Award",
-    year: 1981,
-    guidelines: "#",
-    awardees: "#",
-    registration: "#",
-  },
-  {
-    name: "S.N. Dasgupta Memorial Award",
-    year: 1994,
-    guidelines: "#",
-    awardees: "#",
-    registration: "#",
-  },
-];
+const API_URL = "http://localhost:5000/api/awards";
 
 export default function SocietyAwards() {
+  const [awards, setAwards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAwards = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Sort awards by serial number
+        setAwards(response.data.sort((a, b) => a.sno - b.sno));
+      } catch (err) {
+        console.error("Error fetching awards:", err);
+        setError("Could not load awards data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAwards();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center py-10">Loading Awards...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
   return (
     <div className="min-h-screen bg-white py-10 px-2">
       <div className="bg-white p-8 max-w-6xl mx-auto">
@@ -49,19 +56,22 @@ export default function SocietyAwards() {
             </tr>
           </thead>
           <tbody>
-            {awards.map((award, idx) => (
-              <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="py-2 px-4 align-top">{idx + 1}</td>
+            {awards.map((award) => (
+              <tr key={award._id} className={award.sno % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="py-2 px-4 align-top">{award.sno}</td>
                 <td className="py-2 px-4 align-top whitespace-pre-line">{award.name}</td>
                 <td className="py-2 px-4 align-top whitespace-pre-line">{award.year}</td>
                 <td className="py-2 px-4 align-top text-center">
-                  <Link to={`/awards/guidelines/${encodeURIComponent(award.name)}`} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">View</Link>
+                  {/* Link uses the database _id to fetch specific guidelines */}
+                  <Link to={`/awards/guidelines/${award._id}`} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">View</Link>
                 </td>
                 <td className="py-2 px-4 align-top text-center">
+                  {/* Link passes the award name to filter the awardees list */}
                   <Link to={`/awards/awardees/${encodeURIComponent(award.name)}`} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">View</Link>
                 </td>
                 <td className="py-2 px-4 align-top text-center">
-                  <a href={award.registration} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">View</a>
+                   {/* This now links to the main nominations page */}
+                  <Link to="/award-nominations" className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">Apply</Link>
                 </td>
               </tr>
             ))}
@@ -70,4 +80,4 @@ export default function SocietyAwards() {
       </div>
     </div>
   );
-} 
+}

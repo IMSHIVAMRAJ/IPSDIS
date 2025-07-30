@@ -1,21 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const workshops = [
-  {
-    year: 2011,
-    topic: "Plant Pathology: Vision 2030",
-    venue: "University of Hyderabad, Hyderabad, Telangana",
-    date: "2nd December 2011",
-  },
-  {
-    year: 2014,
-    topic: "Present status and future strategies on Rhizoctonia research in India",
-    venue: "Division of Plant Pathology, IARI, New Delhi",
-    date: "6th March 2014",
-  },
-];
+// Define the API URL for your workshops endpoint
+const API_URL = "http://localhost:5000/api/workshops";
 
 export default function Workshop() {
+  const [workshops, setWorkshops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchWorkshops = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Sort the data by serial number for consistent ordering
+        const sortedData = response.data.sort((a, b) => a.serialNumber - b.serialNumber);
+        setWorkshops(sortedData);
+      } catch (err) {
+        console.error("Error fetching workshops:", err);
+        setError("Could not load workshop data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWorkshops();
+  }, []); // The empty dependency array ensures this runs only once
+
+  if (loading) {
+    return <div className="text-center py-10">Loading Workshops...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
   return (
     <div className="min-h-screen bg-white py-10 px-2">
       <h1 className="text-5xl font-normal text-center text-green-900 mb-2">Workshop/Brain Storming</h1>
@@ -32,13 +50,17 @@ export default function Workshop() {
             </tr>
           </thead>
           <tbody>
-            {workshops.map((ws, idx) => (
-              <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="py-2 px-4 align-top">{idx + 1}</td>
+            {workshops.map((ws) => (
+              <tr key={ws._id} className={ws.serialNumber % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="py-2 px-4 align-top">{ws.serialNumber}</td>
                 <td className="py-2 px-4 align-top whitespace-pre-line">{ws.year}</td>
                 <td className="py-2 px-4 align-top whitespace-pre-line">{ws.topic}</td>
                 <td className="py-2 px-4 align-top whitespace-pre-line">{ws.venue}</td>
-                <td className="py-2 px-4 align-top whitespace-pre-line">{ws.date}</td>
+                <td className="py-2 px-4 align-top whitespace-pre-line">
+                  {new Date(ws.date).toLocaleDateString('en-GB', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                  })}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -46,4 +68,4 @@ export default function Workshop() {
       </div>
     </div>
   );
-} 
+}
