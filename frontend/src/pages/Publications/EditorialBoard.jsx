@@ -1,11 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+// Define the API URL for your editorials endpoint
+const API_URL = "http://localhost:5000/api/editorials";
 
 export default function EditorialBoard() {
+  // State to hold the data grouped by category
+  const [boardData, setBoardData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBoardData = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Group the flat array of members by their category
+        const groupedData = response.data.reduce((acc, member) => {
+          const { category } = member;
+          if (!acc[category]) {
+            acc[category] = [];
+          }
+          acc[category].push(member);
+          return acc;
+        }, {});
+        
+        setBoardData(groupedData);
+      } catch (err) {
+        console.error("Error fetching editorial board data:", err);
+        setError("Could not load data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoardData();
+  }, []); // The empty dependency array ensures this runs only once
+
+  if (loading) {
+    return <div className="text-center py-10">Loading Editorial Board...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
   return (
     <div className="bg-white min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-5xl font-normal text-green-900 mb-10 text-center">
-          Editorial Board (2023-25)
+          Editorial Board
         </h1>
         <div className="overflow-x-auto">
           <table className="min-w-full border border-gray-300 text-gray-900">
@@ -20,52 +63,27 @@ export default function EditorialBoard() {
               </tr>
             </thead>
             <tbody>
-              {/* Chief Editor */}
-              <tr className="bg-gray-50">
-                <td className="px-4 py-3 font-bold bg-gray-100 border-b border-gray-300" colSpan={2}>
-                  Chief Editor
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  <span className="font-bold">Dr. R. Viswanathan</span>, Director, ICAR-Indian Institute of Sugarcane Research, Lucknow, Uttar Pradesh, India, Mob.: 9442543875; Email: rasaviswanath@yahoo.co.in
-                </td>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  Sugarcane Pathology, Molecular Plant Pathology, host-pathogen interaction, Molecular diagnosis
-                </td>
-              </tr>
-              {/* Senior Editors */}
-              <tr className="bg-gray-50">
-                <td className="px-4 py-3 font-bold bg-gray-100 border-b border-gray-300" colSpan={2}>
-                  Senior Editors: Fungal Pathology, Mycology, Nematology
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  <span className="font-bold">Dr. T.K. Bag</span>, Principal Scientist (Plant Pathology), ICAR-Indian Agricultural Research Institute, New Delhi, India, Mob.: 7085951827; Email: tusar.bag@gmail.com
-                </td>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  Fungal Plant Pathology (Vegetables, Orchids, Potato diseases). Presently working in Pulse Diseases
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  <span className="font-bold">Dr. (Ms.) Laetitia Willocquet</span>, Scientist, INRAE, Département Santé des Plantes et Environnement, 400 route des Chappes, BP 167, 06 903 Sophia–Antipolis, cedex, France, Email: lwillocquet@gmail.com; laetitia.willocquet@inrae.fr
-                </td>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  Plant Pathology, Plant Disease Epidemiology<br />
-                  Modelling of yield losses from pests; Phenotyping of quantitative host plant resistance
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  <span className="font-bold">Dr. R. Thangavelu</span>, Principal Scientist, ICAR-National Research Centre for Banana, Tiruchirappalli, Tamil Nadu, India, Mob.: 9443589882; Email: rtbanana@gmail.com
-                </td>
-                <td className="px-4 py-3 align-top border-b border-gray-300">
-                  Molecular characterization and molecular diagnosis of banana fungal pathogens, management of banana diseases through IDM practice, development of mass multiplication and delivery methods for the bioagents, screening of banana genotypes and mutants for their resistance to Fusarium wilt and Sigatoka leaf spot disease, management of post-harvest diseases and increase in shelf life of banana using bioagents and novel compounds for export purposes, isolation and characterization
-                </td>
-              </tr>
-              {/* Add more rows as needed */}
+              {/* Dynamically render categories and members */}
+              {Object.keys(boardData).map((category) => (
+                <React.Fragment key={category}>
+                  {/* Category Header Row */}
+                  <tr className="bg-gray-50">
+                    <td className="px-4 py-3 font-bold bg-gray-100 border-b border-gray-300" colSpan={2}>
+                      {category}
+                    </td>
+                  </tr>
+                  {/* Member Rows for this category */}
+                  {boardData[category].map((member) => (
+                    <tr key={member._id}>
+                      <td className="px-4 py-3 align-top border-b border-gray-300" dangerouslySetInnerHTML={{ __html: member.content.replace(/\n/g, '<br />') }}>
+                      </td>
+                      <td className="px-4 py-3 align-top border-b border-gray-300">
+                        {Array.isArray(member.areasOfSpecialization) ? member.areasOfSpecialization.join(', ') : ''}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
+              ))}
             </tbody>
           </table>
         </div>
