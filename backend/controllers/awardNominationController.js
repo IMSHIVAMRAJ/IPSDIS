@@ -6,8 +6,8 @@ exports.createNomination = async (req, res) => {
 
     const nomination = new AwardNomination({
       mainContent,
-      instructions: JSON.parse(instructions),
-      links: JSON.parse(links),
+      instructions,
+      links,
     });
 
     await nomination.save();
@@ -33,8 +33,8 @@ exports.updateNomination = async (req, res) => {
 
   const updated = {
     mainContent,
-    instructions: JSON.parse(instructions),
-    links: JSON.parse(links),
+    instructions,
+    links,
   };
 
   const nomination = await AwardNomination.findByIdAndUpdate(req.params.id, updated, { new: true });

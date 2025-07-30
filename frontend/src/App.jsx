@@ -35,7 +35,8 @@ import Login from "./pages/Login";
 import Guidelines from "./pages/Awards/Guidelines";
 import Awardees from "./pages/Awards/Awardees";
 import AdminPanel from "./pages/AdminPanel";
-
+import AdminLogin from "./pages/AdminPanel/AdminLogin";
+import ProtectedRoute from "./pages/utils/ProtectedRoute";
 function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
 
@@ -101,8 +102,18 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/:newsId" element={<News />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+
           {/* Admin Panel Routes */}
-          <Route path="/admin/*" element={<AdminPanel />} />
+         
+             <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute>
+              <AdminPanel  />
+            </ProtectedRoute>
+          }
+        />
         </Routes>
       </main>
       <ScrollToTopButton />

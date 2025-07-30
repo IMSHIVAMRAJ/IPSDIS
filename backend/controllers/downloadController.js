@@ -34,7 +34,21 @@ const getAllDownloads = async (req, res) => {
   }
 };
 
+const deleteDownload = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedDownload = await Download.findByIdAndDelete(id);
+    if (!deletedDownload) {
+      return res.status(404).json({ msg: "Download not found" });
+    }
+    res.status(200).json({ msg: "Download deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting download:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
 module.exports = {
   createDownload,
   getAllDownloads,
+  deleteDownload
 };

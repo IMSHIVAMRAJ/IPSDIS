@@ -7,7 +7,7 @@ exports.createBook = async (req, res) => {
 
     const book = new Book({
       name,
-      editors: JSON.parse(editors),
+      editors,
       year,
       pages,
       price,
@@ -39,7 +39,7 @@ exports.updateBook = async (req, res) => {
   const { name, editors, year, pages, price, isbn, about, contents } = req.body;
   const updated = {
     name,
-    editors: JSON.parse(editors),
+    editors,
     year,
     pages,
     price,

@@ -19,7 +19,7 @@ app.use("/api/books", require("./routes/bookRoutes"));
 app.use("/api/workshops",  require("./routes/workshopRoutes"));
 app.use("/api/awards", require("./routes/awardRoutes"));
 app.use("/api/awardees", require("./routes/awardeesRoutes"));
-app.use("/api/awardn", require("./routes/awardNominationRoutes"));
+app.use("/api/award-nomination", require("./routes/awardNominationRoutes"));
 app.use("/api/memberships",require("./routes/membershipRoutes"));
 app.use("/api/payment-details", require("./routes/paymentDetailRoutes"));
 app.use("/api/membership-registrations", require("./routes/membershipRegistrationRoutes"));

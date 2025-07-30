@@ -2,18 +2,16 @@ const News = require("../models/News");
 
 exports.createNews = async (req, res) => {
   try {
-    // console.log("Body:", req.body);
-    // console.log("File:", req.file);
-
     const { title, date, bigContent, links } = req.body;
-    const image = req.file?.path;
+    const image = req.file?.path; // Use optional chaining for safety
 
     const news = new News({
       title,
       date,
       image,
       bigContent,
-      links: links ? JSON.parse(links) : [],
+      // ✅ CORRECTED LINE: Put the single link string into an array
+      links: links ? [links] : [],
     });
 
     await news.save();
@@ -23,7 +21,6 @@ exports.createNews = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 exports.getAllNews = async (req, res) => {
   const news = await News.find().sort({ createdAt: -1 });
   res.status(200).json(news);
@@ -41,7 +38,8 @@ exports.updateNews = async (req, res) => {
     title,
     date,
     bigContent,
-    links: links ? JSON.parse(links) : [],
+          links: links ? [links] : [],
+
   };
 
   if (req.file) {

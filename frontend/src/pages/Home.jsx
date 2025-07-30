@@ -1,32 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowRight, FaLeaf, FaImages } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Carousel from "../components/Carousel";
+import axios from "axios";
 
-const newsItems = [
-  { 
-    text: "Participation in Viksit Krishi Sankalp Abhiyan-2025 and Reorientation of Institutional Research", 
-    date: "2025-05-29",
-    id: "participation-viksit-krishi-sankalp-abhiyan-2025"
-  },
-  { 
-    text: "IPS Annual General Body Meeting (AGBM) on January 20, 2025 at 5.00 PM at Nagpur, Maharashtra", 
-    date: "2024-12-17",
-    id: "ips-annual-general-body-meeting-2025"
-  },
-  { 
-    text: "Final Voting Announcement: IPS Election Announcement (2025)", 
-    date: "2024-12-17",
-    id: "final-voting-announcement-ips-election-2025"
-  },
-  { 
-    text: "Online IPS Awards application: Submission date extended till 31st August 2024", 
-    date: "2024-07-29",
-    id: "online-ips-awards-application-extension"
-  },
-];
+// Define the API URL for your news endpoint
+const API_URL = "http://localhost:5000/api/news";
 
 function Home() {
+  // State to store the fetched news items
+  const [latestNews, setLatestNews] = useState([]);
+
+  // useEffect hook to fetch news when the component mounts
+  useEffect(() => {
+    const fetchLatestNews = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Sort news by date to get the newest first, then take the top 5
+        const sortedNews = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setLatestNews(sortedNews.slice(0, 5));
+      } catch (error) {
+        console.error("Error fetching latest news:", error);
+      }
+    };
+
+    fetchLatestNews();
+  }, []); // The empty dependency array ensures this runs only once
+
   return (
     <div className="w-full">
       {/* Main Banner Carousel */}
@@ -40,6 +40,7 @@ function Home() {
           />
         </div>
       </div>
+
       {/* Main Content Layout */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 py-3 sm:py-10 px-2 sm:px-6">
         {/* Main Content */}
@@ -98,6 +99,7 @@ function Home() {
             </a>
           </section>
         </div>
+
         {/* Right Sidebar for Latest News and Gallery */}
         <aside className="w-full md:w-80 flex flex-col gap-6">
           {/* Latest News Section */}
@@ -110,20 +112,21 @@ function Home() {
             </div>
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
               <ul className="space-y-3">
-                {newsItems.map((item, idx) => (
-                  <li key={idx} className="flex flex-col border-b border-gray-100 pb-2 last:border-b-0">
+                {latestNews.map((item) => (
+                  <li key={item._id} className="flex flex-col border-b border-gray-100 pb-2 last:border-b-0">
                     <Link 
-                      to={`/news/${item.id}`}
+                      to={`/news/${item._id}`}
                       className="text-green-900 font-medium hover:underline text-base"
                     >
-                      {item.text}
+                      {item.title}
                     </Link>
-                    <span className="text-xs text-gray-500 mt-1">{item.date}</span>
+                    <span className="text-xs text-gray-500 mt-1">{new Date(item.date).toLocaleDateString()}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </section>
+
           {/* Gallery Carousel Section */}
           <section className="bg-white rounded-lg shadow p-0 flex flex-col items-center">
             <div className="flex items-center gap-2 w-full px-4 pt-4 pb-2">

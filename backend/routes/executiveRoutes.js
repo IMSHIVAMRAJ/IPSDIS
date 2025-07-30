@@ -11,7 +11,7 @@ const {
 } = require("../controllers/executiveController");
 
 router.post("/", protect, upload.single("image"), createExecutive);
-router.get("/", getAllExecutives);
+router.get("/get", getAllExecutives);
 router.get("/:id", getExecutiveById);
 router.put("/:id", protect, upload.single("image"), updateExecutive);
 router.delete("/:id", protect, deleteExecutive);
