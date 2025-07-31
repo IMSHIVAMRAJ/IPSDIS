@@ -84,7 +84,7 @@ function Home() {
             <div className="w-full flex justify-center mb-3 sm:mb-4">
               <div className="w-full aspect-video max-w-full sm:max-w-2xl">
                 <iframe
-                  src="https://www.youtube.com/embed/1G4isv_Fylg"
+                  src="https://www.youtube.com/embed/SbLva72F-c4?si=lr5YHw5Eg38rK6FR"
                   title="IPS YouTube Video"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
