@@ -100,7 +100,7 @@ function App() {
           <Route path="/membership/registration" element={<Registration />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/news" element={<News />} />
+           <Route path="/news/:newsId" element={<News />} /> 
         <Route path="/awards/guidelines/:id" element={<Guidelines />} />
           <Route path="/admin-login" element={<AdminLogin />} />
 
