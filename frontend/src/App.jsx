@@ -14,7 +14,6 @@ import Journal from "./pages/Publications/Journal";
 import EditorialBoard from "./pages/Publications/EditorialBoard";
 import Books from "./pages/Publications/Books";
 import BookDetail from "./pages/Publications/BookDetail";
-import AbstractBooks from "./pages/Publications/AbstractBooks";
 import AnnualReports from "./pages/Publications/AnnualReports";
 import Awards from "./pages/Awards/Awards";
 import SocietyAwards from "./pages/Awards/SocietyAwards";
@@ -83,7 +82,6 @@ function App() {
           <Route path="/publications/editorial-board" element={<EditorialBoard />} />
           <Route path="/publications/books" element={<Books />} />
           <Route path="/publications/book/:bookId" element={<BookDetail />} />
-          <Route path="/publications/abstract-books" element={<AbstractBooks />} />
           <Route path="/publications/annual-reports" element={<AnnualReports />} />
           <Route path="/awards" element={<Awards />} />
           <Route path="/awards/society" element={<SocietyAwards />} />
