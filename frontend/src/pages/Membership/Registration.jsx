@@ -38,13 +38,13 @@ const MEMBERSHIP_API_URL = "http://localhost:5000/api/memberships";
 const REGISTER_API_URL = "http://localhost:5000/api/membership-registrations/register";
 
 export default function Registration() {
-  const [memberType, setMemberType] = useState("Indian"); // Corresponds to 'nationality'
-  const [regTypeId, setRegTypeId] = useState(""); // Will store the selected membership's _id
-  
+  const [memberType, setMemberType] = useState("Indian");
+  const [regTypeId, setRegTypeId] = useState("");
   const [membershipOptions, setMembershipOptions] = useState([]);
   const [cost, setCost] = useState(null);
 
   const [form, setForm] = useState({
+    name: "", // added name field
     email: "",
     contact: "",
     password: "",
@@ -53,12 +53,12 @@ export default function Registration() {
     address: "",
     specialization: "",
   });
+
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
 
-  // 1. Fetch all available membership types on component load
   useEffect(() => {
     const fetchMembershipOptions = async () => {
       try {
@@ -72,7 +72,6 @@ export default function Registration() {
     fetchMembershipOptions();
   }, []);
 
-  // 2. Update the cost whenever the user selects a registration type
   useEffect(() => {
     if (regTypeId) {
       const selectedOption = membershipOptions.find(opt => opt._id === regTypeId);
@@ -81,12 +80,10 @@ export default function Registration() {
       setCost(null);
     }
   }, [regTypeId, membershipOptions]);
-  
-  // Reset registration type when nationality changes
+
   useEffect(() => {
     setRegTypeId("");
   }, [memberType]);
-
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -108,6 +105,7 @@ export default function Registration() {
     }
 
     const registrationData = {
+      name: form.name, // send name to backend
       nationality: memberType,
       membershipType: cost.membershipType,
       membershipFee: cost.total,
@@ -130,8 +128,7 @@ export default function Registration() {
       setError(message);
     }
   };
-  
-  // Filter available registration types based on selected nationality
+
   const availableRegTypes = membershipOptions.filter(opt => opt.nationality === memberType);
 
   return (
@@ -154,16 +151,15 @@ export default function Registration() {
           <h2 className="text-2xl font-semibold text-center text-green-900 mb-6">Membership Registration</h2>
           <div className="flex justify-center gap-8 mb-6">
             {["Indian", "SAARC", "Foreign"].map(nat => (
-                <label key={nat} className="flex items-center gap-2 font-medium text-green-900">
-                    <input type="radio" name="memberType" value={nat} checked={memberType === nat} onChange={() => setMemberType(nat)} className="accent-green-700" />
-                    {nat} Member
-                </label>
+              <label key={nat} className="flex items-center gap-2 font-medium text-green-900">
+                <input type="radio" name="memberType" value={nat} checked={memberType === nat} onChange={() => setMemberType(nat)} className="accent-green-700" />
+                {nat} Member
+              </label>
             ))}
           </div>
           <div className="flex items-center gap-6 mb-6">
             <div className="flex-none">
               <label className="block font-medium text-gray-700 mb-1">Registration Fee</label>
-              {/* --- Start of Changed Code --- */}
               <select 
                 className="border rounded px-3 py-2 w-full max-w-[200px]" 
                 value={regTypeId} 
@@ -176,7 +172,6 @@ export default function Registration() {
                   </option>
                 ))}
               </select>
-              {/* --- End of Changed Code --- */}
             </div>
             <div className="font-semibold text-green-900 text-lg">
               Cost: <span className="font-bold text-xl">{cost ? `₹${cost.total.toLocaleString('en-IN')}` : 'N/A'}</span>
@@ -190,6 +185,7 @@ export default function Registration() {
               </div>
             ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Full Name*" name="name" value={form.name} onChange={handleChange} />
               <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Email Address*" name="email" type="email" value={form.email} onChange={handleChange} />
               <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Contact*" name="contact" value={form.contact} onChange={handleChange} />
               <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Designation*" name="designation" value={form.designation} onChange={handleChange} />
