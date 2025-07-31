@@ -2,6 +2,38 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
+// Toast notification component
+const Toast = ({ message, isVisible, onClose }) => {
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, onClose]);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 animate-fade-in">
+      <div className="flex-shrink-0">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <div className="flex-1">
+        <p className="font-medium">{message}</p>
+      </div>
+      <button onClick={onClose} className="flex-shrink-0 ml-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  );
+};
+
 const MEMBERSHIP_API_URL = "http://localhost:5000/api/memberships";
 const REGISTER_API_URL = "http://localhost:5000/api/membership-registrations/register";
 
@@ -23,6 +55,7 @@ export default function Registration() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
 
   // 1. Fetch all available membership types on component load
@@ -88,9 +121,9 @@ export default function Registration() {
 
     try {
       await axios.post(REGISTER_API_URL, registrationData);
-      setSubmitted(true);
+      setShowToast(true);
       setTimeout(() => {
-        navigate("/login");
+        navigate("/");
       }, 3000);
     } catch (err) {
       const message = err.response?.data?.message || "Registration failed. Please try again.";
@@ -103,6 +136,11 @@ export default function Registration() {
 
   return (
     <div className="min-h-screen bg-[#13785f] flex items-center justify-center py-12 px-4">
+      <Toast 
+        message="Registration successful! We will contact you soon!"
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
       <div className="w-full max-w-2xl bg-white rounded shadow-lg">
         <div className="flex flex-row items-center border-b py-4 px-6 gap-4">
           <img src="/Images/logo.png" alt="IPS Logo" className="w-20 h-20 object-contain" />
@@ -148,7 +186,7 @@ export default function Registration() {
             <div className="font-semibold text-green-900 mb-2">Registration Details</div>
             {submitted ? (
               <div className="text-green-700 text-lg font-medium text-center py-4">
-                Thank you for registering!<br />Redirecting you to the login page...
+                Thank you for registering!<br />Redirecting you to the home page...
               </div>
             ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

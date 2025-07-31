@@ -52,7 +52,6 @@ function Header() {
           { to: "/publications/journal", label: "Journal - Indian Phytopathology" },
           { to: "/publications/editorial-board", label: "Editorial Board" },
           { to: "/publications/books", label: "Books" },
-          { to: "/publications/abstract-books", label: "Abstract Books" },
           { to: "/publications/annual-reports", label: "Annual Reports" },
         ],
       },

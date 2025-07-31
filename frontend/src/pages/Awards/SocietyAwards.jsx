@@ -52,7 +52,6 @@ export default function SocietyAwards() {
               <th className="py-3 px-4 text-left font-semibold">Year of Institution</th>
               <th className="py-3 px-4 text-center font-semibold">Guidelines</th>
               <th className="py-3 px-4 text-center font-semibold">Awardees</th>
-              <th className="py-3 px-4 text-center font-semibold">Online Registration</th>
             </tr>
           </thead>
           <tbody>
@@ -68,10 +67,6 @@ export default function SocietyAwards() {
                 <td className="py-2 px-4 align-top text-center">
                   {/* Link passes the award name to filter the awardees list */}
                   <Link to={`/awards/awardees/${encodeURIComponent(award.name)}`} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">View</Link>
-                </td>
-                <td className="py-2 px-4 align-top text-center">
-                   {/* This now links to the main nominations page */}
-                  <Link to="/award-nominations" className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition font-semibold">Apply</Link>
                 </td>
               </tr>
             ))}
