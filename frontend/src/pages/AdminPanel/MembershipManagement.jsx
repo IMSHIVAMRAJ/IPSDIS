@@ -265,7 +265,7 @@ export default function MembershipManagement() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {existingMembers.map((member) => (
                   <tr key={member._id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{member.designation}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{member.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.contact}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.membershipType}</td>

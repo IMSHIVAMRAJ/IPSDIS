@@ -4,6 +4,7 @@ exports.register = async (req, res) => {
   try {
     // 1. Destructure the request body (confirmPassword is not needed)
     const {
+      name,
       nationality,
       email,
       contact,
@@ -27,6 +28,7 @@ exports.register = async (req, res) => {
 
     // 4. Create the new registration with the hashed password
     const registration = new MembershipRegistration({
+      name,
       nationality,
       email,
       contact,

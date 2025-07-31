@@ -82,7 +82,7 @@ export default function Directory() {
           <thead className="bg-gray-800 text-white">
             <tr>
               <th className="py-3 px-4 text-left font-semibold">SN</th>
-              <th className="py-3 px-4 text-left font-semibold">ID</th>
+              {/* <th className="py-3 px-4 text-left font-semibold">ID</th> */}
               <th className="py-3 px-4 text-left font-semibold">Name</th>
               <th className="py-3 px-4 text-left font-semibold">Email</th>
               <th className="py-3 px-4 text-left font-semibold">Phone</th>
@@ -100,7 +100,7 @@ export default function Directory() {
               paginated.map((m, idx) => (
                 <tr key={m._id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="py-2 px-4">{(page - 1) * pageSize + idx + 1}</td>
-                  <td className="py-2 px-4 text-xs text-gray-500">{m._id}</td>
+                  {/* <td className="py-2 px-4 text-xs text-gray-500">{m._id}</td> */}
                   <td className="py-2 px-4 whitespace-nowrap">{m.name || 'N/A'}</td>
                   <td className="py-2 px-4 whitespace-nowrap">{m.email}</td>
                   <td className="py-2 px-4 whitespace-nowrap">{m.contact}</td>

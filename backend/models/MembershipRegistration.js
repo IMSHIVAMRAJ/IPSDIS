@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const membershipRegistrationSchema = new mongoose.Schema({
+  name:{
+  type:String,
+  required:true
+  },
   nationality: {
     type: String,
     required: true,
