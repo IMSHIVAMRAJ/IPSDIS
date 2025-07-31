@@ -15,8 +15,7 @@ const protect = require('../middleware/authMiddleware');
 router.post('/register', register);
 
 // Admin-only
-router.get('/', protect, getAllRegistrations);
+router.get('/',  getAllRegistrations);
 router.put('/accept/:id', protect, acceptRegistration);
 router.delete('/reject/:id', protect, rejectRegistration);
-
 module.exports = router;

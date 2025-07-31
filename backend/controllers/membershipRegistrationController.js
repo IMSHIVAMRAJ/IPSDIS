@@ -1,13 +1,13 @@
 const MembershipRegistration = require("../models/MembershipRegistration");
-
+const bcrypt = require("bcryptjs");
 exports.register = async (req, res) => {
   try {
+    // 1. Destructure the request body (confirmPassword is not needed)
     const {
       nationality,
       email,
       contact,
-      password,
-      confirmPassword,
+      password, // Only the final password is taken
       designation,
       address,
       areaOfSpecialization,
@@ -15,15 +15,22 @@ exports.register = async (req, res) => {
       membershipFee
     } = req.body;
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords do not match" });
+    // 2. Check if a user with this email already exists
+    const existingUser = await MembershipRegistration.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "An account with this email already exists." });
     }
 
+    // 3. Securely hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 4. Create the new registration with the hashed password
     const registration = new MembershipRegistration({
       nationality,
       email,
       contact,
-      password,
+      password: hashedPassword, // Save the secure, hashed password
       designation,
       address,
       areaOfSpecialization,
@@ -32,9 +39,11 @@ exports.register = async (req, res) => {
     });
 
     await registration.save();
-    res.status(201).json({ message: "Registration submitted", registration });
+    res.status(201).json({ message: "Registration submitted successfully" });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("REGISTRATION ERROR:", err);
+    res.status(500).json({ error: "Server error during registration." });
   }
 };
 

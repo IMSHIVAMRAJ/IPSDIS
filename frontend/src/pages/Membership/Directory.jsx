@@ -1,55 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const sampleMembers = [
-  {
-    id: 1,
-    name: "Samad Abdul",
-    email: "samad_cimap@yahoo.co.in",
-    phone: "9415911805",
-    designation: "Chief Scientist & Head (Retd.)",
-    address: `Plant Pathology\nDepartment CSIR-\nCentral Institute for Medicinal and Aromatic Plants\n226015 Lucknow\nUttar Pradesh`,
-    specialization: "Plant Pathology",
-  },
-  {
-    id: 97,
-    name: "D.K. Banyal",
-    email: "dkbanyal@gmail.com",
-    phone: "9418111480",
-    designation: "Head",
-    address: `Department of Plant Pathology CSK\nHimachal Pradesh Agricultural University 176062\nPalampur Himachal Pradesh`,
-    specialization: "Vegetable Fungal Pathology, Disease Epidemiology, Disease Management, Fungicides and Protected Cultivation, Disease Epidemiology",
-  },
-  {
-    id: 98,
-    name: "D. Bap Reddy",
-    email: "",
-    phone: "",
-    designation: "",
-    address: `33/U.R.T. Barkatpura\n500013 Hyderabad\nTelangana`,
-    specialization: "",
-  },
-];
+// Define the API URL for your membership registrations endpoint
+const API_URL = "http://localhost:5000/api/membership-registrations";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 export default function Directory() {
+  const [allMembers, setAllMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(100);
   const [page, setPage] = useState(1);
 
-  // Filter and paginate
-  const filtered = sampleMembers.filter(
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        // Filter to show only members with "accepted" status
+        const acceptedMembers = response.data.filter(
+          (member) => member.status === "accepted"
+        );
+        setAllMembers(acceptedMembers);
+      } catch (err) {
+        console.error("Error fetching members:", err);
+        setError("Could not load member directory.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMembers();
+  }, []);
+
+  // Filter and paginate the fetched data on the client-side
+  const filtered = allMembers.filter(
     (m) =>
-      m.name.toLowerCase().includes(search.toLowerCase()) ||
-      m.email.toLowerCase().includes(search.toLowerCase()) ||
-      m.phone.includes(search) ||
-      m.designation.toLowerCase().includes(search.toLowerCase()) ||
-      m.address.toLowerCase().includes(search.toLowerCase()) ||
-      m.specialization.toLowerCase().includes(search.toLowerCase())
+      (m.name?.toLowerCase() || '').includes(search.toLowerCase()) ||
+      (m.email?.toLowerCase() || '').includes(search.toLowerCase()) ||
+      (m.contact?.toLowerCase() || '').includes(search.toLowerCase()) ||
+      (m.designation?.toLowerCase() || '').includes(search.toLowerCase()) ||
+      (m.address?.toLowerCase() || '').includes(search.toLowerCase()) ||
+      (m.areaOfSpecialization?.toLowerCase() || '').includes(search.toLowerCase())
   );
+  
   const total = filtered.length;
   const totalPages = Math.ceil(total / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  if (loading) {
+    return <div className="text-center py-10">Loading Member Directory...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-2">
@@ -66,7 +72,7 @@ export default function Directory() {
         </select>
         <input
           className="border rounded px-3 py-2 w-full md:w-80"
-          placeholder="Search.."
+          placeholder="Search members..."
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1); }}
         />
@@ -92,24 +98,23 @@ export default function Directory() {
               </tr>
             ) : (
               paginated.map((m, idx) => (
-                <tr key={m.id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                <tr key={m._id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="py-2 px-4">{(page - 1) * pageSize + idx + 1}</td>
-                  <td className="py-2 px-4">{m.id}</td>
-                  <td className="py-2 px-4 whitespace-nowrap">{m.name}</td>
+                  <td className="py-2 px-4 text-xs text-gray-500">{m._id}</td>
+                  <td className="py-2 px-4 whitespace-nowrap">{m.name || 'N/A'}</td>
                   <td className="py-2 px-4 whitespace-nowrap">{m.email}</td>
-                  <td className="py-2 px-4 whitespace-nowrap">{m.phone}</td>
+                  <td className="py-2 px-4 whitespace-nowrap">{m.contact}</td>
                   <td className="py-2 px-4 whitespace-nowrap">{m.designation}</td>
                   <td className="py-2 px-4 whitespace-pre-line">{m.address}</td>
-                  <td className="py-2 px-4 whitespace-pre-line">{m.specialization}</td>
+                  <td className="py-2 px-4 whitespace-pre-line">{m.areaOfSpecialization}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
-      {/* Pagination */}
       <div className="flex flex-wrap justify-center items-center gap-2 mt-6 text-gray-700">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+        {totalPages > 1 && Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
           <button
             key={num}
             className={`px-3 py-1 rounded ${num === page ? "bg-green-800 text-white" : "hover:bg-green-100"}`}
@@ -119,9 +124,9 @@ export default function Directory() {
           </button>
         ))}
         <span className="ml-4 text-gray-500 text-sm">
-          Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, total)} of {total} entries
+          Showing {Math.min((page - 1) * pageSize + 1, total)} to {Math.min(page * pageSize, total)} of {total} entries
         </span>
       </div>
     </div>
   );
-} 
+}

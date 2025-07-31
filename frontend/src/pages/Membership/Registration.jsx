@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+
+const MEMBERSHIP_API_URL = "http://localhost:5000/api/memberships";
+const REGISTER_API_URL = "http://localhost:5000/api/membership-registrations/register";
 
 export default function Registration() {
-  const [memberType, setMemberType] = useState("indian");
-  const [regType, setRegType] = useState("");
+  const [memberType, setMemberType] = useState("Indian"); // Corresponds to 'nationality'
+  const [regTypeId, setRegTypeId] = useState(""); // Will store the selected membership's _id
+  
+  const [membershipOptions, setMembershipOptions] = useState([]);
+  const [cost, setCost] = useState(null);
+
   const [form, setForm] = useState({
     email: "",
     contact: "",
@@ -14,180 +23,154 @@ export default function Registration() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Dummy cost logic
-  const cost = regType === "" ? "" : regType === "life" ? "₹2000" : "₹1000";
+  // 1. Fetch all available membership types on component load
+  useEffect(() => {
+    const fetchMembershipOptions = async () => {
+      try {
+        const response = await axios.get(`${MEMBERSHIP_API_URL}/get`);
+        setMembershipOptions(response.data);
+      } catch (err) {
+        console.error("Failed to fetch membership options:", err);
+        setError("Could not load membership fees. Please refresh.");
+      }
+    };
+    fetchMembershipOptions();
+  }, []);
+
+  // 2. Update the cost whenever the user selects a registration type
+  useEffect(() => {
+    if (regTypeId) {
+      const selectedOption = membershipOptions.find(opt => opt._id === regTypeId);
+      setCost(selectedOption);
+    } else {
+      setCost(null);
+    }
+  }, [regTypeId, membershipOptions]);
+  
+  // Reset registration type when nationality changes
+  useEffect(() => {
+    setRegTypeId("");
+  }, [memberType]);
+
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.contact || !form.password || !form.confirmPassword || !form.designation || !form.address || !form.specialization) {
-      setError("All fields are required.");
-      return;
+    setError("");
+
+    if (Object.values(form).some(field => field === "")) {
+      return setError("All fields are required.");
+    }
+    if (!regTypeId || !cost) {
+      return setError("Please select a valid membership type.");
     }
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
+      return setError("Passwords do not match.");
     }
-    setSubmitted(true);
-  }
+
+    const registrationData = {
+      nationality: memberType,
+      membershipType: cost.membershipType,
+      membershipFee: cost.total,
+      email: form.email,
+      contact: form.contact,
+      password: form.password,
+      designation: form.designation,
+      address: form.address,
+      areaOfSpecialization: form.specialization,
+    };
+
+    try {
+      await axios.post(REGISTER_API_URL, registrationData);
+      setSubmitted(true);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    } catch (err) {
+      const message = err.response?.data?.message || "Registration failed. Please try again.";
+      setError(message);
+    }
+  };
+  
+  // Filter available registration types based on selected nationality
+  const availableRegTypes = membershipOptions.filter(opt => opt.nationality === memberType);
 
   return (
-    <div className="min-h-screen bg-[#13785f] flex items-center justify-center py-15 px-4">
-      <div className="w-full max-w-5xl bg-white rounded shadow-lg"> {/* changed max-w-lg to max-w-2xl */}
-        {/* Header */}
-        <div className="flex flex-row items-center border-b py-6 px-4 gap-6"> {/* changed flex-col to flex-row and added gap */}
-          <img
-            src="/Images/logo.png"
-            alt="IPS Logo"
-            className="w-24 h-24 object-contain mb-2"
-            style={{ minWidth: 80 }}
-          />
-          <div className="text-left text-green-900 font-semibold leading-tight text-base">
+    <div className="min-h-screen bg-[#13785f] flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-2xl bg-white rounded shadow-lg">
+        <div className="flex flex-row items-center border-b py-4 px-6 gap-4">
+          <img src="/Images/logo.png" alt="IPS Logo" className="w-20 h-20 object-contain" />
+          <div className="text-left text-green-900 font-semibold leading-tight">
             <div className="text-lg font-bold">INDIAN PHYTOPATHOLOGICAL SOCIETY</div>
             <div className="text-xs font-semibold">DIVISION OF PLANT PATHOLOGY</div>
-            <div className="text-xs">
-              Indian Agricultural Research Institute, New Delhi - 110012<br />
-              Telefax: 011-25840023 &nbsp; E-mail : ipsdis@yahoo.com<br />
-              Website : www.ipsdis.org
-            </div>
+            <div className="text-xs">Indian Agricultural Research Institute, New Delhi - 110012</div>
           </div>
         </div>
-        {/* Registration Form */}
         <div className="py-8 px-6">
           <h2 className="text-2xl font-semibold text-center text-green-900 mb-6">Membership Registration</h2>
-          {/* Member Type */}
           <div className="flex justify-center gap-8 mb-6">
-            <label className="flex items-center gap-2 font-medium text-green-900">
-              <input
-                type="radio"
-                name="memberType"
-                value="indian"
-                checked={memberType === "indian"}
-                onChange={() => setMemberType("indian")}
-                className="accent-green-700"
-              />
-              Indian Member
-            </label>
-            <label className="flex items-center gap-2 font-medium text-green-900">
-              <input
-                type="radio"
-                name="memberType"
-                value="foreign"
-                checked={memberType === "foreign"}
-                onChange={() => setMemberType("foreign")}
-                className="accent-green-700"
-              />
-              Foreign Member
-            </label>
+            {["Indian", "SAARC", "Foreign"].map(nat => (
+                <label key={nat} className="flex items-center gap-2 font-medium text-green-900">
+                    <input type="radio" name="memberType" value={nat} checked={memberType === nat} onChange={() => setMemberType(nat)} className="accent-green-700" />
+                    {nat} Member
+                </label>
+            ))}
           </div>
-          {/* Registration Fee */}
           <div className="flex items-center gap-6 mb-6">
-            <div className="flex-none" style={{ minWidth: 180, maxWidth: 220 }}>
+            <div className="flex-none">
               <label className="block font-medium text-gray-700 mb-1">Registration Fee</label>
-              <select
-                className="border rounded px-3 py-2 w-full"
-                style={{ maxWidth: 180 }}
-                value={regType}
-                onChange={e => setRegType(e.target.value)}
+              {/* --- Start of Changed Code --- */}
+              <select 
+                className="border rounded px-3 py-2 w-full max-w-[200px]" 
+                value={regTypeId} 
+                onChange={e => setRegTypeId(e.target.value)}
               >
                 <option value="">Select Type</option>
-                <option value="life">Life Member</option>
-                <option value="annual">Annual Member</option>
+                {availableRegTypes.map(opt => (
+                  <option key={opt._id} value={opt._id}>
+                    {opt.membershipType}
+                  </option>
+                ))}
               </select>
+              {/* --- End of Changed Code --- */}
             </div>
-            <div className="font-semibold text-green-900 text-base ml-6">
-              Cost: <span className="font-normal">{cost}</span>
+            <div className="font-semibold text-green-900 text-lg">
+              Cost: <span className="font-bold text-xl">{cost ? `₹${cost.total.toLocaleString('en-IN')}` : 'N/A'}</span>
             </div>
           </div>
-          {/* Registration Details */}
           <div className="mb-6">
             <div className="font-semibold text-green-900 mb-2">Registration Details</div>
+            {submitted ? (
+              <div className="text-green-700 text-lg font-medium text-center py-4">
+                Thank you for registering!<br />Redirecting you to the login page...
+              </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Email Address"
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Contact"
-                name="contact"
-                value={form.contact}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Designation"
-                name="designation"
-                value={form.designation}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Address"
-                name="address"
-                value={form.address}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Area of Specialization"
-                name="specialization"
-                value={form.specialization}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Password"
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                autoComplete="off"
-              />
-              <input
-                className="w-full border-b border-gray-300 px-2 py-2 focus:outline-none focus:border-green-700 placeholder-gray-500"
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                autoComplete="off"
-              />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Email Address*" name="email" type="email" value={form.email} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Contact*" name="contact" value={form.contact} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Designation*" name="designation" value={form.designation} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Address*" name="address" value={form.address} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Area of Specialization*" name="specialization" value={form.specialization} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Password*" name="password" type="password" value={form.password} onChange={handleChange} />
+              <input className="w-full border-b px-2 py-2 focus:outline-none focus:border-green-700" placeholder="Confirm Password*" name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} />
               {error && <div className="text-red-600 text-sm font-medium">{error}</div>}
-              {submitted ? (
-                <div className="text-green-700 text-lg font-medium text-center py-4">
-                  Thank you for registering!<br />Your information has been submitted.
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className="w-full bg-[#0ac15a] hover:bg-[#0a9e4a] text-white py-3 rounded font-semibold text-base mt-2 shadow transition-colors"
-                >
-                  SAVE & CONTINUE
-                </button>
-              )}
+              <button type="submit" className="w-full bg-[#0ac15a] hover:bg-[#0a9e4a] text-white py-3 rounded font-semibold mt-2 shadow transition-colors">
+                SAVE & CONTINUE
+              </button>
             </form>
+            )}
           </div>
-          {/* Already Registered */}
           <div className="text-center mt-6 text-base font-semibold">
             Already Registered?{" "}
-            <a href="/login" className="text-green-700 underline hover:text-green-900">
+            <Link to="/login" className="text-green-700 underline hover:text-green-900">
               Click here
-            </a>{" "}
+            </Link>{" "}
             to login.
           </div>
         </div>
