@@ -57,16 +57,18 @@ function Home() {
 
           {/* About the Society Highlight */}
           <section>
-            <div className="bg-green-50 border-l-8 border-green-700 rounded-lg shadow p-6 flex items-start gap-4">
-              <FaLeaf className="text-green-700 text-4xl mt-1 hidden sm:block" />
-              <div>
-                <h2 className="text-xl font-bold text-green-800 mb-2">About the Society</h2>
-                <p className="text-green-900 mb-1">
-                  The Indian Phytopathological Society (IPS) is a professional society for promoting the cause of science of Phytopathology. The Society focuses in the field of Mycology, Plant Pathology, Bacteriology, Virology, Phytoplasmology and Nematology.
-                </p>
-                <p className="text-green-900">
-                  It provides a unique platform to the scientists working in the field of plant pathological related research to share their research achievements. It also keeps members informed about the various activities related to the development of plant pathology and about the members of the Society.
-                </p>
+          <div className="bg-green-50 border-l-8 border-green-700 rounded-lg shadow p-6 flex items-start gap-4">
+    <FaLeaf className="text-green-700 text-4xl mt-1 hidden sm:block" />
+    <div>
+      <h2 className="text-xl font-bold text-green-800 mb-2">
+        About the Society
+      </h2>
+      <p className="text-green-900 mb-1">
+        Agriculture, Entrepreneur, Environment & Technology Development Society (AEETDS) is a nationally recognized, autonomous research and educational organization based in Lucknow, Uttar Pradesh, India. It is registered under the Societies Registration Act XXI of 1860 (Reg. No. LUC/00238/2024-25).
+      </p>
+      <p className="text-green-900">
+        AEETDS is committed to transforming Indian agriculture and rural livelihoods through scientific research, entrepreneurial innovation, environmental stewardship, and educational outreach. It provides a dynamic platform for farmers, researchers, educators, and agri-entrepreneurs to collaborate, share knowledge, and develop sustainable, tech-enabled agricultural solutions for the future.
+      </p>
                 <Link
                   to="/about"
                   className="inline-flex items-center gap-2 mt-4 px-5 py-2 rounded bg-[#0d6e50] text-white font-semibold shadow hover:bg-[#0a573f] transition-colors duration-200"

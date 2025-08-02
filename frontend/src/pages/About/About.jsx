@@ -3,40 +3,89 @@ import React from "react";
 function About() {
   return (
     <div className="bg-white p-8 max-w-4xl mx-auto py-8 px-4">
-      {/* Title */}
       <h1 className="text-5xl font-normal text-green-900 mb-6">
         About the Society
       </h1>
 
       {/* Main Description */}
-      <div className="text-gray-800 text-base leading-relaxed mb-6">
+      <div className="text-gray-800 text-base leading-relaxed space-y-4 mb-6">
         <p>
-          The Indian Phytopathological Society (IPS) is a professional society for promoting the cause of the science of Phytopathology. The Society focuses on the field of Mycology, Plant Pathology, Bacteriology, Virology, Phytoplasmology, and Nematology. It provides a unique platform to the scientists working in the field of plant pathology-related research to share their research achievements. It also keeps members informed about the various activities related to the development of plant pathology and about the members of the society.
+          <strong>
+            Agriculture, Entrepreneur, Environment & Technology Development
+            Society (AEETDS), Lucknow, Uttar Pradesh, India
+          </strong>
+          <br />
+          Registered under Societies Registration Act XXI of 1860 (Reg. No.
+          LUC/00238/2024-25)
         </p>
-      </div>
-
-      {/* Objectives Section */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-green-900 mb-3">Objectives</h2>
-        <p className="text-gray-800 mb-4">
-          The Society was basically formed with the following objectives:
-        </p>
-        <ol className="list-decimal list-inside space-y-2 text-gray-800">
-          <li>To advance the cause of Mycology and Plant Pathology in India.</li>
-          <li>To encourage and promote mycological and plant pathological studies and research in the country.</li>
-          <li>To disseminate the knowledge of mycology and plant pathology.</li>
-          <li>To facilitate closer association and relations among members and other scientific workers in India and abroad.</li>
-        </ol>
-      </div>
-
-      {/* Registration and Headquarters */}
-      <div className="text-gray-800 text-base leading-relaxed">
         <p>
-          The Society was registered on 3-11-1949, under the Societies Registration Act XXI of 1860 with Registration No. S399 of 1949-50. A very significant step to make the Society stable was taken in the XI Annual General Meeting held in Delhi on 23rd January 1959 when it was resolved that the Division of Mycology and Plant Pathology, Indian Agricultural Research Institute, New Delhi would be the permanent Headquarters of the Society.
+          The Agriculture, Entrepreneur, Environment & Technology Development
+          Society (AEETDS) is a nationally recognized, autonomous, research and
+          educational organization based in Lucknow, Uttar Pradesh, established
+          in 2024. Committed to transforming Indian agriculture and rural
+          livelihoods, AEETDS champions the integration of scientific research,
+          entrepreneurial innovation, environmental stewardship, and capacity
+          building to serve farmers, students, researchers, and rural
+          communities.
+        </p>
+        <p>
+          At the heart of AEETDS’s mission is its robust commitment to
+          organizing impactful conferences, symposia, training programmes, and
+          workshops that address the most pressing and contemporary challenges
+          in agriculture and allied sciences. The society regularly hosts
+          national and international-level academic and policy events, bringing
+          together scientists, educators, extension professionals,
+          agri-entrepreneurs, and farmers under one roof to foster dialogue,
+          disseminate innovations, and promote actionable solutions for
+          sustainable agricultural development.
+        </p>
+        <p>
+          These forums cover critical themes such as climate-resilient farming,
+          agro-biotechnology, digital agriculture, precision farming, soil
+          health, water conservation, and agribusiness incubation, ensuring that
+          cutting-edge knowledge is shared with grassroots stakeholders and
+          academic leaders alike. AEETDS’s events are designed not only to share
+          research and technological advancements but also to build skills,
+          leadership, and entrepreneurship among rural youth, women, and
+          aspiring agripreneurs.
+        </p>
+        <p>
+          Beyond event organization, AEETDS operates at the confluence of
+          science, policy, and practice, driving interdisciplinary research and
+          on-ground initiatives that promote sustainable farming systems,
+          environmental conservation, and rural empowerment. The society
+          supports the development of agri-tech solutions, incubator models for
+          agri-SMEs, and business mentorship programs for start-ups. It also
+          promotes environmental sustainability through awareness on ecosystem
+          services, rainwater harvesting, and resource-efficient practices.
+        </p>
+        <p>
+          To further its educational objectives, AEETDS publishes monthly
+          magazines and plans to launch high-quality peer-reviewed journals for
+          research in agriculture, biological sciences, medical sciences,
+          physical sciences, and social sciences. These publications are aimed
+          at expanding knowledge networks and supporting academic excellence in
+          both basic and applied domains.
+        </p>
+        <p>
+          Women empowerment and digital inclusion also form core pillars of the
+          society’s outreach. AEETDS initiates targeted training and skill
+          development schemes for women, rural youth, and marginal farmers,
+          empowering them to become self-reliant and engaged in modern,
+          market-driven agricultural practices.
+        </p>
+        <p>
+          AEETDS believes that a vibrant, sustainable, and innovative
+          agriculture sector begins with education, exposure, and engagement. By
+          motivating young minds, building institutional capacities, and
+          connecting field realities with research and innovation, the society
+          envisions a future where knowledge meets action, and agriculture
+          becomes a catalyst for inclusive development and environmental
+          sustainability.
         </p>
       </div>
     </div>
   );
 }
 
-export default About; 
+export default About;
