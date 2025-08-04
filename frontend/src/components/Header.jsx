@@ -182,7 +182,7 @@ function Header() {
         <div className="flex items-center gap-4 w-full sm:w-auto ml-2 sm:ml-4 mt-1">
           {/* Logo - replace src with actual logo later */}
           <img
-            src="https://www.ipsdis.org/images/logo.png"
+            src="/Images/logo.png"
             alt="IPS Logo"
             className="h-16 w-16 sm:h-24 sm:w-24 object-contain rounded-full"
           />
