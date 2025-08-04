@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
 
@@ -10,6 +10,35 @@ function Header() {
   const [conferenceDropdownOpen, setConferenceDropdownOpen] = useState(false);
   const [membershipDropdownOpen, setMembershipDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setAboutDropdownOpen(false);
+    setPublicationsDropdownOpen(false);
+    setAwardsDropdownOpen(false);
+    setConferenceDropdownOpen(false);
+    setMembershipDropdownOpen(false);
+  }, [location.pathname]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && !event.target.closest('header')) {
+        setMobileMenuOpen(false);
+        setAboutDropdownOpen(false);
+        setPublicationsDropdownOpen(false);
+        setAwardsDropdownOpen(false);
+        setConferenceDropdownOpen(false);
+        setMembershipDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { to: "/", label: "Home" },
@@ -130,7 +159,13 @@ function Header() {
             <ul className="space-y-1 mb-2">
               {section.links.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="hover:underline">{l.label}</Link>
+                  <Link 
+                    to={l.to} 
+                    className="hover:underline"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -160,7 +195,20 @@ function Header() {
         </div>
         {/* Hamburger for mobile */}
         <div className="sm:hidden absolute right-4 top-6 z-50"> {/* Increased top spacing */}
-          <button onClick={() => setMobileMenuOpen((v) => !v)} className="text-green-900 text-2xl focus:outline-none">
+          <button 
+            onClick={() => {
+              setMobileMenuOpen((v) => !v);
+              // Close all dropdowns when mobile menu is toggled
+              if (mobileMenuOpen) {
+                setAboutDropdownOpen(false);
+                setPublicationsDropdownOpen(false);
+                setAwardsDropdownOpen(false);
+                setConferenceDropdownOpen(false);
+                setMembershipDropdownOpen(false);
+              }
+            }} 
+            className="text-green-900 text-2xl focus:outline-none"
+          >
             {mobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -243,8 +291,8 @@ function Header() {
             );
           })}
           <div className="flex flex-col gap-2 mt-4">
-            <Link to="/login" className="text-green-900 hover:underline text-base font-medium">Login</Link>
-            <Link to="/join" className="text-green-900 hover:underline text-base font-medium">Join New Member</Link>
+            <Link to="/login" className="text-green-900 hover:underline text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+            <Link to="/membership/registration" className="text-green-900 hover:underline text-base font-medium" onClick={() => setMobileMenuOpen(false)}>Join New Member</Link>
           </div>
         </nav>
       )}

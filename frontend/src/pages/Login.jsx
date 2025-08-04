@@ -16,9 +16,12 @@ function Login() {
         {/* Header */}
         <div className="flex flex-row items-center py-6 border-b px-6">
           <img
-            src="/public/Images/logo.png"
+            src="/Images/logo.png"
             alt="IPS Logo"
             className="h-20 w-20 object-contain mr-6"
+            onError={(e) => {
+              e.target.src = "https://www.ipsdis.org/images/logo.png";
+            }}
           />
           <div className="text-left">
             <div className="text-lg font-semibold text-green-900">

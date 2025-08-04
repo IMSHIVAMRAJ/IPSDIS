@@ -170,6 +170,9 @@ export default function Registration() {
             src="/Images/logo.png"
             alt="IPS Logo"
             className="w-20 h-20 object-contain"
+            onError={(e) => {
+              e.target.src = "https://www.ipsdis.org/images/logo.png";
+            }}
           />
           <div className="text-left text-green-900 font-semibold leading-tight">
             <div className="text-lg font-bold">
